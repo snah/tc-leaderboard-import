@@ -24,19 +24,69 @@ regex_tgm = r'''
     )?
     '''
 
+regex_death = r'''
+    ^(.*)               # Name
+    [ ]---*[ ]+
+    (\d+)               # Level
+    [@ ]+
+    ([\d:.-]*)          # Time
+    [| ]+
+    (?:
+    (.*)                # Comment
+    )?
+    '''
 
-def read_scoreboard(text):
+
+regex_texmaster = r'''
+    ^(.*)               # Name
+    \ ---*[ ]+
+    ([\dSMVKG]+(?:[ ]o)?)      # Class
+    [ ]+
+    (\d+)               # Level
+    [ ]+
+    (?:\[ol])?
+    ([\d:]+)            # Time
+    (?:\[/ol])?
+    (?:
+    (.*)                # Comment
+    )?
+    '''
+
+regex_table = {
+        'TGM1': regex_tgm,
+        'TAP_master': regex_tgm,
+        'TAP_death': regex_death,
+        'texmaster_special_ti': regex_texmaster,
+        'texmaster_special': regex_texmaster,
+        }
+
+
+def read_scoreboard(text, regex):
     scoreboard = []
     for line in text.split('\n'):
-        match = re.match(regex_tgm, line, re.VERBOSE)
+        match = re.match(regex, line, re.VERBOSE)
         if match:
             scoreboard.append(match.groups())
     return scoreboard
 
 
 
-if __name__ == '__main__':
+def main():
+    try:
+        regex = regex_table[sys.argv[1].split('/')[-1]]
+    except KeyError:
+        print('No input regex set for file {}.'.format(sys.argv[1]), file=sys.stdout)
+        return
+
     with open(sys.argv[1]) as f:
-        scoreboard = read_scoreboard(f.read())
+        scoreboard = read_scoreboard(f.read(), regex)
+    try:
+        outfile = open(sys.argv[2], 'w')
+    except IndexError:
+        outfile = sys.stdout
+
     for line in scoreboard:
-        print(','.join(map(str, line)))
+        print(','.join(map(lambda x: x or '', line)), file=outfile)
+
+if __name__ == '__main__':
+    main()
