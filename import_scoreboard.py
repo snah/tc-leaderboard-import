@@ -42,10 +42,23 @@ regex_texmaster = r'''
     \ ---*[ ]+
     ([\dSMVKG]+(?:[ ]o)?)      # Class
     [ ]+
-    (\d+)               # Level
+    ([\dx]+)               # Level
     [ ]+
     (?:\[ol])?
-    ([\d:]+)            # Time
+    ([\d:x]+)            # Time
+    (?:\[/ol])?
+    (?:
+    (.*)                # Comment
+    )?
+    '''
+
+regex_texmaster2 = r'''
+    ^(.*)               # Name
+    \ ---*[ ]+
+    ([\dx]+)               # Level
+    [ ]+
+    (?:\[ol])?
+    ([\d:x]+)            # Time
     (?:\[/ol])?
     (?:
     (.*)                # Comment
@@ -58,6 +71,8 @@ regex_table = {
         'TAP_death': regex_death,
         'texmaster_special_ti': regex_texmaster,
         'texmaster_special': regex_texmaster,
+        'texmaster_sudden_ti': regex_texmaster,
+        'texmaster_sudden': regex_texmaster2,
         }
 
 
