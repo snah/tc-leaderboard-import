@@ -9,6 +9,7 @@ output/%.csv: input/%
 	python import_scoreboard.py $< $@
 
 all: $(TARGET_FILES)
+	mkdir output
 
 clean:
 	rm -f output/*
