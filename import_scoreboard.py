@@ -66,6 +66,22 @@ regex_death = r'''
     )?
     '''
 
+regex_doubles = r'''
+    ^(.+[^-])           # Name1
+    ---*[ ]
+    (\d+)               # Lines1
+    [@ ]+
+    ([\d:.-]+)          # Time
+    [@ ]+
+    (\d+)               # Lines2
+    [ ]---*
+    (.+)               # Name2
+    (?:
+    [| ]+
+    (.*)                # Comment
+    )?
+    '''
+
 regex_ti = r'''
     ^[. ]*(\d+)         # Rank
     --
@@ -153,10 +169,12 @@ regex_table = {
         'TAP_master': regex_tgm,
         'TAP_death': regex_death,
         'TAP_normal': regex_tap_normal,
+        'TAP_doubles': regex_doubles,
         'Ti_master_provisional': regex_ti,
         'Ti_master_qualified': regex_ti,
         'Ti_master_world_provisional': regex_ti,
         'Ti_master_world_qualified': regex_ti,
+        'Ti_shirase': regex_ti,
         'texmaster_special_ti': regex_texmaster,
         'texmaster_special': regex_texmaster,
         'texmaster_sudden_ti': regex_texmaster,
