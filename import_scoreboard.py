@@ -23,7 +23,7 @@ import sys
 regex_tgm = r'''
     ^[. ]*(\d+)         # Rank
     --
-    (.+)                # Name
+    (.*[^-])            # Name
     ---*[ ]*
     ([^- ]+)            # Grade
     [- ]+
@@ -39,11 +39,26 @@ regex_tgm = r'''
     (.*)                # Comment
     )?
     '''
+regex_tgm_20G = r'''
+    ^[. ]*(\d+)         # Rank
+    [ .]*
+    (.*[^-])            # Name
+    ---*[ ]*
+    ([\d-]*)            # Level
+    [ ]*@[ ]*
+    ([\d:.-]*)          # Time
+    [ ]
+    ([^- ]+)            # Grade
+    (?:
+    [- ]+
+    (.*)                # Comment
+    )?
+    '''
 
 regex_tap_normal = r'''
     ^[. ]*(\d+)         # Rank
     --
-    (.+)                # Name
+    (.*[^-])            # Name
     ---*
     (\d+)               # Points
     [ ]pts[@ ]+
@@ -55,7 +70,7 @@ regex_tap_normal = r'''
     '''
 
 regex_death = r'''
-    ^(.+)               # Name
+    ^(.*[^-])           # Name
     [ ]---*[ ]+
     (\d+)               # Level
     [@ ]+
@@ -75,7 +90,23 @@ regex_doubles = r'''
     [@ ]+
     (\d+)               # Lines2
     [ ]---*
-    (.+)               # Name2
+    (.+)                # Name2
+    (?:
+    [| ]+
+    (.*)                # Comment
+    )?
+    '''
+
+regex_tap_big = r'''
+    ^[. ]*(\d+)         # Rank
+    [. ]*
+    (.*\S)            # Name
+    \s+
+    ([SGMsgm\d_]+)      # Grade
+    \s+
+    (\d+)               # Level
+    \s+
+    ([\d:.-]+)          # Time
     (?:
     [| ]+
     (.*)                # Comment
@@ -111,7 +142,7 @@ regex_ti = r'''
     '''
 
 regex_texmaster = r'''
-    ^(.+)                   # Name
+    ^(.*[^-])               # Name
     \ ---*[ ]+
     ([\dSMVKG]+(?:[ ]o)?)   # Class
     [ ]+
@@ -126,22 +157,22 @@ regex_texmaster = r'''
     '''
 
 regex_texmaster2 = r'''
-    ^(.+)               # Name
+    ^(.*[^-])            # Name
     \ ---*[ ]+
-    ([\dx]+)               # Level
+    ([\dx]+)             # Level
     [ ]+
     (?:\[ol])?
     ([\d:x]+)            # Time
     (?:\[/ol])?
     (?:
-    (.*)                # Comment
+    (.*)                 # Comment
     )?
     '''
 
 regex_NES = r'''
     ^[. ]*(\d+)         # Rank
     [- ]+
-    (.+)                # Name
+    (.*[^-])            # Name
     [- ]+
     ([\d,]+)            # Score
     [- ]+
@@ -153,7 +184,7 @@ regex_NES = r'''
 regex_NES_level19 = r'''
     ^[. ]*(\d+)         # Rank
     --
-    (.+)                # Name
+    (.*[^-])            # Name
     ---*[ ]*
     ([\d,]+)            # Score
     [- ]+
@@ -166,10 +197,12 @@ regex_NES_level19 = r'''
 
 regex_table = {
         'TGM1': regex_tgm,
+        'TGM_20G_code': regex_tgm_20G,
         'TAP_master': regex_tgm,
         'TAP_death': regex_death,
         'TAP_normal': regex_tap_normal,
         'TAP_doubles': regex_doubles,
+        'TAP_master_big_code': regex_tap_big,
         'Ti_master_provisional': regex_ti,
         'Ti_master_qualified': regex_ti,
         'Ti_master_world_provisional': regex_ti,
