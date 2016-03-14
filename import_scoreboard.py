@@ -24,6 +24,20 @@ regex_tgm = r'''
     )?
     '''
 
+regex_tap_normal = r'''
+    ^[. ]*(\d+)         # Rank
+    --
+    (.+)                # Name
+    ---*
+    (\d+)               # Points
+    [ ]pts[@ ]+
+    ([\d:.-]+)          # Time
+    (?:
+    [| ]+
+    (.*)                # Comment
+    )?
+    '''
+
 regex_death = r'''
     ^(.+)               # Name
     [ ]---*[ ]+
@@ -36,19 +50,46 @@ regex_death = r'''
     )?
     '''
 
+regex_ti = r'''
+    ^[. ]*(\d+)         # Rank
+    --
+    (.*[^-])            # Name
+    ---*[ ]*
+    ([^- ]+)            # Grade
+    [- ]+
+    ([\d?-]*)           # Level
+    [ ]*@[ ]*
+    ([\d:.-?]*)         # Time
+    \s+-\s+
+    ([\d./?-]*)         # Date
+    (?:
+    [ ]-[ ]
+    (..)                # ST
+    [ ]
+    (..)                # AC
+    [ ]
+    (..)                # CO
+    [ ]
+    (..)                # SK
+    (?:
+    [ ]-[ ]
+    (.*)                # Comment
+    )?
+    )?
+    '''
 
 regex_texmaster = r'''
-    ^(.+)               # Name
+    ^(.+)                   # Name
     \ ---*[ ]+
-    ([\dSMVKG]+(?:[ ]o)?)      # Class
+    ([\dSMVKG]+(?:[ ]o)?)   # Class
     [ ]+
-    ([\dx]+)               # Level
+    ([\dx]+)                # Level
     [ ]+
     (?:\[ol])?
-    ([\d:x]+)            # Time
+    ([\d:x]+)               # Time
     (?:\[/ol])?
     (?:
-    (.*)                # Comment
+    (.*)                    # Comment
     )?
     '''
 
@@ -95,6 +136,11 @@ regex_table = {
         'TGM1': regex_tgm,
         'TAP_master': regex_tgm,
         'TAP_death': regex_death,
+        'TAP_normal': regex_tap_normal,
+        'Ti_master_provisional': regex_ti,
+        'Ti_master_qualified': regex_ti,
+        'Ti_master_world_provisional': regex_ti,
+        'Ti_master_world_qualified': regex_ti,
         'texmaster_special_ti': regex_texmaster,
         'texmaster_special': regex_texmaster,
         'texmaster_sudden_ti': regex_texmaster,
